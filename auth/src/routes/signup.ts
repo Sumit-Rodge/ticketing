@@ -20,38 +20,33 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    try {
-      const { email, password } = req.body;
+    const { email, password } = req.body;
 
-      const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-      if (existingUser) {
-        throw new BadRequestError('Email is already in use');
-      }
-
-      const user = User.build({ email, password });
-
-      await user.save();
-
-      //Generate JWtdf
-      const userJwt = jwt.sign(
-        {
-          id: user.id,
-          email: user.email,
-        },
-        process.env.JWT_KEY!
-      );
-
-      //Store JWT on session object
-      req.session = {
-        jwt: userJwt,
-      };
-
-      res.status(201).send(user);
-    } catch (error) {
-      console.log(error);
-      res.sendStatus(401);
+    if (existingUser) {
+      throw new BadRequestError('Email is already in use');
     }
+
+    const user = User.build({ email, password });
+
+    await user.save();
+
+    //Generate JWtdf
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_KEY!
+    );
+
+    //Store JWT on session object
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(201).send(user);
   }
 );
 
