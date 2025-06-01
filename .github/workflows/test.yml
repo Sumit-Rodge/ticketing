@@ -1,25 +1,26 @@
 name: tests
 
-on: 
+on:
   pull_request
 
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
       - uses: actions/checkout@v2
 
-      - name: Install OS dependencies (required by mongod)
-        run: sudo apt-get update && sudo apt-get install -y libcurl4 openssl
-
-      - name: Set environment variables for MongoDB Memory Server
+      - name: Install libssl1.1 for mongodb-memory-server
         run: |
-          echo "MONGOMS_VERSION=4.0.14" >> $GITHUB_ENV
-          echo "MONGOMS_DEBUG=1" >> $GITHUB_ENV
-          echo "DEBUG=mongodb-memory-server*" >> $GITHUB_ENV
+          sudo apt-get update
+          sudo apt-get install -y wget gdebi-core
+          wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.1/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+          sudo gdebi -n libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
 
-      - name: Install Node modules and run tests
+      - name: Set MongoDB version for mongodb-memory-server
+        run: echo "MONGOMS_VERSION=4.0.14" >> $GITHUB_ENV
+
+      - name: Install dependencies and run tests
         run: |
           cd auth
           npm install --legacy-peer-deps
