@@ -6,22 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install libssl1.1 for mongodb-memory-server
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget gdebi-core
-          wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.1/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-          sudo gdebi -n libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-
-      - name: Set MongoDB version for mongodb-memory-server
-        run: echo "MONGOMS_VERSION=4.0.14" >> $GITHUB_ENV
-
-      - name: Install dependencies and run tests
-        run: |
-          cd auth
-          npm install --legacy-peer-deps
-          npm run test:ci
+      - run: cd auth && npm install --legacy-peer-deps && npm run test:ci
