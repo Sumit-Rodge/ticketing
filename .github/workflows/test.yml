@@ -8,4 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd auth && npm install --legacy-peer-deps && npm run test:ci
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: cd auth && npm install --legacy-peer-deps
+
+      - name: Pre-download MongoDB binary (optional but helps)
+        run: cd auth && npx mongodb-memory-server --download
+
+      - name: Run tests
+        run: cd auth && npm run test:ci
+        env:
+          MONGOMS_DOWNLOAD_DIR: /tmp/mongodb-binaries
