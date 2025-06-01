@@ -6,6 +6,21 @@ on:
 jobs: 
   build:
     runs-on: ubuntu-latest
+
     steps: 
       - uses: actions/checkout@v2
-      - run: cd auth && npm install --legacy-peer-deps && npm run test:ci
+
+      - name: Install OS dependencies (required by mongod)
+        run: sudo apt-get update && sudo apt-get install -y libcurl4 openssl
+
+      - name: Set environment variables for MongoDB Memory Server
+        run: |
+          echo "MONGOMS_VERSION=4.0.14" >> $GITHUB_ENV
+          echo "MONGOMS_DEBUG=1" >> $GITHUB_ENV
+          echo "DEBUG=mongodb-memory-server*" >> $GITHUB_ENV
+
+      - name: Install Node modules and run tests
+        run: |
+          cd auth
+          npm install --legacy-peer-deps
+          npm run test:ci
