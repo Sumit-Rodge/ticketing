@@ -17,9 +17,6 @@ jobs:
       - name: Install dependencies
         run: cd auth && npm install --legacy-peer-deps
 
-      - name: Pre-download MongoDB binary (optional but helps)
-        run: cd auth && npx mongodb-memory-server --download
-
       - name: Run tests
         run: cd auth && npm run test:ci
         env:
