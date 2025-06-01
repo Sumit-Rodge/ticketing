@@ -1,23 +1,11 @@
-name: tests
+name: testsAdd commentMore actions
 
-on:
+on: 
   pull_request
 
-jobs:
+jobs: 
   build:
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        run: cd auth && npm install --legacy-peer-deps
-
-      - name: Run tests
-        run: cd auth && npm run test:ci
-        env:
-          MONGOMS_DOWNLOAD_DIR: /tmp/mongodb-binaries
+      - run: cd auth && npm install --legacy-peer-deps && npm run test:ci
