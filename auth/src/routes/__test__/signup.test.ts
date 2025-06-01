@@ -35,7 +35,7 @@ it('returns a 400 with an missing email and password', async () => {
   return request(app).post('/api/users/signup').send({}).expect(400);
 });
 
-it('disallow duplicate emails', async () => {
+it('disallows duplicate emails', async () => {
   await request(app)
     .post('/api/users/signup')
     .send({
